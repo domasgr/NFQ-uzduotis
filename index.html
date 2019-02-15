@@ -11,19 +11,13 @@
 	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-
-
-	<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
-
-
-
-<!-- Modal -->
+<!---------------------------------------Modals ------------------------------------->
+		<!-- Reservation confirmation modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="confirm-title">Registruotis : data</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -31,28 +25,53 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <label for="recipient-name" class="col-form-label">Jūsų vardas:</label>
+            <input type="text" class="form-control" id="confirm-name">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="accept" class="btn btn-primary accept-btn">Send message</button>
+        <button type="button" id="close-confirm" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+        <button type="button" id="accept" class="btn btn-primary accept-btn">Registruotis!</button>
       </div>
     </div>
   </div>
 </div>
+		<!-- Reservation canceling modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Ar tikrai norite atšaukti rezervaciją?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nenoriu</button>
+        <button id="cancelConfirmation" type="button" class="btn btn-primary">Taip</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------------------------------------ Modals end-------------------------------->
 
 
-
-
+<!---------------------------- Alerts ------------------------------------------------->
+<div id="reservationAlert" class="alert alert-danger display-none" role="alert">
+  Šis laikas yra užimtas.
+</div>
+<div id="reservationDone" class="alert alert-success display-none" role="alert">
+  Jūs jau esate užsirezervavę laiką !   
+</div>
+<!---------------------------Alerts end ------------------------------------------------>
 	<h1>Hello</h1>
-	
+	<div>
+		<p id="reservationInfo">Jūs dar neužsirezervavote</p>
+	</div>
 	<div id="weekSchedule">
 		<div id="controler">
 			<button id="previous">Ankstesnė</button>

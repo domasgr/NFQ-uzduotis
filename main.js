@@ -306,9 +306,10 @@ function fillDataFromDB(x){
 		if(reservation !== null){
 			console.log(reservation.hasOwnProperty("style"))
 				if(reservation.id === madeReservation){
-					reservation.classList.add("reservation")
+					reservation.classList.add("reservation");
 				} else{
 					reservation.style.backgroundColor = "red";
+					reservation.onclick = function(){unavailableReservation()};
 				}				
 		}
 		
@@ -318,37 +319,90 @@ function fillDataFromDB(x){
 function makeReservation(id){
 	// const reservationId = id;
 	if(!madeReservation){
-		// $('#exampleModal').modal();
-		// $(".accept-btn").attr("id", "accept"+id);
-		// $('#accept'+id).click(function(){
-			console.log(id)
-			let reservationDay = document.getElementById(id);
-			reservationDay.classList.toggle("reservation");
-			madeReservation = reservationDay.id;
-			test1.reservations.push({"year":id})
-			console.log(test1)
-		// })
-			
-			
-			
-				
-				
-			
-		
+		$('#exampleModal').modal();
+			reservationConfirmation(function(confirm){
+				console.log("funkcija veikia")
+			  if(confirm){
+			  	console.log(id)
+				let reservationDay = document.getElementById(id);
+				let confirmName = $('#confirm-name').val();
+				console.log(confirmName)
+				reservationDay.classList.toggle("reservation");
+				madeReservation = reservationDay.id;
+				test1.reservations.push({"year":id})
+				console.log(test1)
+				$("#exampleModal").modal('hide');
+				$('.accept-btn').unbind('click');
+
+				const userInfo = document.getElementById("reservationInfo"); // update user info
+				userInfo.innerText = id;		   
+			  }else{
+
+			  }
+			  $('.accept-btn').unbind('click');
+			  $("#exampleModal").unbind("on")
+			});			
 	}
 	else if(madeReservation === id){
-		let reservationDay = document.getElementById(id);
-		reservationDay.classList.toggle("reservation");
-		madeReservation = false;
-		test1.reservations.  pop();
+		$("#cancelModal").modal("show");
+		cancelConfirmation(function(confirm){
+			if(confirm){
+				let reservationDay = document.getElementById(id);
+				reservationDay.classList.toggle("reservation");
+				madeReservation = false;
+				test1.reservations.pop();
+				$("#cancelModal").modal("hide");
+
+				const userInfo = document.getElementById("reservationInfo"); // update user info
+				userInfo.innerText = "Jūs dar neužsirezervavote";
+			}
+		})
+		
+	}
+	else{
+		const alert =  document.getElementById("reservationDone");
+		alert.classList.remove("display-none")
+		setTimeout(function(){
+			alert.classList.add("display-none")
+		}, 3000)
 	}
 }
-// function giveFunctionality(x){
-// 	let data = x.reservations;
-// 	for
-// }
+
 fillDataFromDB(test1);
 
 
+function reservationConfirmation(callback){			// accepting or canceling reservation trough confirm modal
+ $('.accept-btn').click(function(){
+ 	const nameInput = $('#confirm-name').val();
+ 	if(nameInput.length < 2){						 //handling reservation without name
 
+ 	} else{
+ 		callback(true);
+ 	}
+ 	console.log(nameInput.length)
+    
+  });
+  $("#exampleModal").on("hidden.bs.modal", function(){
+  	 $('.accept-btn').unbind('click');
+  })
+};
+
+function cancelConfirmation(callback){
+ 	$('#cancelConfirmation').click(function(){
+ 		callback(true)
+ 	});
+ 	$('#cancelModal').on('hidden.bs.modal', function(){
+ 		$('#cancelConfirmation').unbind("click")
+ 	})
+ }
+
+function unavailableReservation(){
+	const alert = document.getElementById("reservationAlert")
+	alert.classList.remove("display-none")
+	console.log(alert)
+	setTimeout(function(){
+	console.log(alert.classList)	
+		alert.classList.add("display-none");
+	}, 3000)
+}
 

@@ -1,6 +1,14 @@
 th{
 	font-size: 10px;
 }
+.alert{
+	position: fixed;
+	width: 100%;
+	transition: all .3s;
+}
+.display-none{
+	display: none;
+}
 .reservation{
 	background: green;
 }
