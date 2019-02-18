@@ -7,80 +7,91 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- CSS files -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-<!---------------------------------------Modals ------------------------------------->
-		<!-- Reservation confirmation modal -->
+<!-----------------------------------MODALS--------------------------------------->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="confirm-title">Registruotis : data</h5>
+        <h5 class="modal-title" id="confirm-title">Registruoti</h5>
+        
+      </div>
+      <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-
+        <h5 id="confirm-date"></h5>
+        <h5 id="confirm-time"></h5>
         <form>
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Jūsų vardas:</label>
+            <label for="recipient-name" class="col-form-label">Kliento vardas</label>
             <input type="text" class="form-control" id="confirm-name">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" id="close-confirm" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
-        <button type="button" id="accept" class="btn btn-primary accept-btn">Registruotis!</button>
+        <button type="button" id="accept" class="btn btn-primary accept-btn">Registruoti</button>
       </div>
     </div>
   </div>
 </div>
-		<!-- Reservation canceling modal -->
-<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+  
+<div class="modal fade" id="editReservation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
+
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="edit-title">Modal title</h5>
+        
+      </div>
+      <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        Ar tikrai norite atšaukti rezervaciją?
+        <p id="nameInfo"></p>
+        <p id="dateInfo"></p>
+        <p id="timeInfo"></p>
+        <button id="deleteReservation" type="button" class="btn btn-danger">Ištrinti</button>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nenoriu</button>
-        <button id="cancelConfirmation" type="button" class="btn btn-primary">Taip</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-<!------------------------------------------ Modals end-------------------------------->
 
 
-<!---------------------------- Alerts ------------------------------------------------->
-<div id="reservationAlert" class="alert alert-danger display-none" role="alert">
-  Šis laikas yra užimtas.
-</div>
-<div id="reservationDone" class="alert alert-success display-none" role="alert">
-  Jūs jau esate užsirezervavę laiką !   
-</div>
-<!---------------------------Alerts end ------------------------------------------------>
-	<h1>Hello</h1>
+
+		<h1>Kirpeju psl</h1>
 	<div>
 		<p id="reservationInfo">Jūs dar neužsirezervavote</p>
 	</div>
 	<div id="weekSchedule">
-		<div id="controler">
-			<button id="previous">Ankstesnė</button>
-			<p id="dateDisplay"></p>
-			<button id="next">Sekanti</button>
+    <h1>Rezervacijų sąrašas</h1>
+		<div id="controller">
+			<button id="previous">
+        <i class="fas fa-caret-left"></i>
+        <p>Ankstesnė</p>
+    </button>
+			<div id="dateDisplay">
+            
+      </div>
+			<button id="next">
+        <i class="fas fa-caret-right"></i>
+        <p>Sekanti</p>
+      </button>
 		</div>
-		<table id="weekTable">
-		</table>
+		<ul id="weekTable" class="">
+		</ul>
 	</div>
 	<button id="refresh">Refresh</button>
 
@@ -88,6 +99,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="main2.js"></script>
 </body>
 </html>

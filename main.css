@@ -1,3 +1,15 @@
+*,
+*::after,
+*::before{
+    margin-bottom: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+body{
+	box-sizing: border-box;
+	background: #f19d94;
+}
+
 th{
 	font-size: 10px;
 }
@@ -11,4 +23,203 @@ th{
 }
 .reservation{
 	background: green;
+}
+
+
+
+
+#weekSchedule{
+	width: 1050px;
+	margin: 0 auto;
+	background: #d0b6a4;
+    border-radius: 8px;
+    overflow: hidden;
+}
+#weekTable{
+	margin: 0 auto;
+}
+#weekTable > tr:nth-of-type(even){
+	background: #e6e5e5;
+}
+#weekTable > tr:nth-of-type(odd){
+	background: #b9b9b9;
+}
+
+
+
+th tr th{
+	position: relative;
+	/*background: red;*/
+    width: 45px;
+    /*border-right: 1px solid black;
+    border-bottom: 1px solid;*/
+    font-size: 11px;
+    font-weight: 500;
+}
+th tr th span{
+	position: absolute;
+	top: 15px;
+}
+
+
+
+
+
+
+
+
+
+/******************************************************************************************/
+#controller{
+	display: flex;
+	justify-content: center;
+	height: 69px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+#controller button{
+	border: none;
+    background: white;
+    outline: none;
+    padding: 6px;
+    width: 70px;
+}
+#controller button .fas{
+	font-size: 40px;
+}
+#controller button p{
+	font-size: 10px;
+	text-transform: uppercase;
+}
+#dateDisplay{
+	display: flex;
+    width: 191px;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+#dateDisplay span{
+	margin: 0 4px;
+}
+
+
+
+
+/************************ MODAL STYLE***********************/
+.modal-content{
+	background: transparent;
+	border: none;
+}
+.modal-content .far{
+	margin-right: 10px;
+}
+.modal-content .fas{
+	margin-right: 5px;
+}
+.modal-title{
+	font-size: 15px;
+}
+.modal-header{
+	background: white;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	width: 203px;
+	height: 40px;
+}
+.modal-body{
+	background: white;
+}
+.modal-body h5{
+	font-size: 18px;
+
+}
+.modal-body button{
+	margin-top: 15px;
+}
+.modal-body {
+	font-size: 18px;
+}
+.modal-footer{
+	background: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+li{
+	display: flex;
+	height: 50%;
+}
+ul{
+	padding: 0;
+	margin: 0;}
+ul li div{
+	width: 5%;
+	font-size: 10px;
+	padding-left: 4px;
+
+}
+ul li div:hover{
+	background: black;
+}
+p{
+	margin: 0;
+}
+
+#weekTable{
+	width: 1000px;
+}
+
+.table-row{
+	width: 1000px;
+	margin-bottom: 10px;
+	border-radius: 7px;
+	box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.75);
+	overflow: hidden;
+}
+.table-row > div{
+	width: 100px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 69px;
+}
+	.table-row .weekday, .table-row .date{
+		background: white;
+	}
+	.table-row .weekday{
+		font-size: 14px;
+	}
+	.table-row .date{
+		display: flex;
+    	flex-direction: column;
+    	font-size: 12px;
+	}
+		.date span{
+			font-size: 33px;
+			margin-top: -12px;
+		}
+.table-row > ul{
+	width: 800px;
+}
+.table-row:nth-of-type(even){
+	background: #eff2e2;
+}
+.table-row:nth-of-type(odd){
+	background: #d6d8c9;
 }
