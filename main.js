@@ -1,7 +1,4 @@
-
-// x = JSON.stringify(test1)
-// var x = JSON.parse(test1.reservations)
-
+// KINTAMIEJI-----------------------------------------------------------
 // Dabartines datos informacija
 const today = new Date();
 
@@ -22,7 +19,7 @@ const currentMonth = today.getMonth();
 	let userName = undefined;
 
 	let worker = "Ieva";
-	// let previewedMonth = month;
+	
 
 
 
@@ -32,25 +29,46 @@ let dateDisplay = document.getElementById("dateDisplay");
 
 let nextBtn = document.getElementById("next");
 let previousBtn = document.getElementById("previous");
-// let currentMonth = today.getMonth();
-// let currentYear = today.getFullYear();
+
 let months = ["Sausio", "Vasario", "Kovo", "Balandžio", "Gegužės", "Birželio", "Liepos", "Rugpjūčio", "Rugsėjo", "Spalio", "Lapkričio", "Gruodžio"]
 let days = ["Pirmadienis", "Antradienis", "Treciadienis", "Ketvirtadienis", "Penktadienis", "Sestadienis", "Sekmadienis"]
 
 
 
+//PROGRAMOS INICIJACIJA -------------------------------------------------
+$("document").ready(function(){
+	buildWeek(currentWeekday, currentMonth, currentDate); // Sukuria savaitini kalendoriu
+	fillDataFromDB(reservationsData); // Uzpildo kalendoriu rezervaciju informacija
+	startTime();// Laikrodzio veikimas
+	displayTodayDate();// Rodo šiandienos datą
+	nextBtn.addEventListener("click", function(){ // KAlendoriaus navigavcija
+		nextWeek(montht, nextWeekDay);
+	});
+
+	previousBtn.addEventListener("click", function(){ // Kalendoriaus navigacija
+		previousWeek(montht, nextWeekDay);
+	});
+
+	$("select").on('change', function(){   // Kirpejos pasirinkimas
+		table.innerHTML="";
+		worker = this.value;
+		montht = currentMonth;
+		buildWeek(currentWeekday, currentMonth, currentDate);
+		fillDataFromDB(reservationsData);
+	});
 
 
+});
 
-
-
+// VISOS FUNKCIJOS -----------------------------------------
 
 function nextWeek(previewedMonth, nextWeekDay){
 	const firstWeekdayShowed = 1;
 	table.innerHTML="";
 	buildWeek(firstWeekdayShowed, previewedMonth, nextWeekDay);
-	fillDataFromDB(test1);
+	fillDataFromDB(reservationsData);
 }
+
 function previousWeek(previewedMonthF, nextWeekDay){
 	table.innerHTML="";
 	const firstWeekdayShowed = 1;
@@ -60,8 +78,7 @@ function previousWeek(previewedMonthF, nextWeekDay){
 				buildWeek(currentWeekday, currentMonth, currentDate);
 			}else{
 				buildWeek(firstWeekdayShowed, previewedMonthF, previousWeekDay);
-			}
-			
+			}	
 		} else {
 			let daysOfLastMonth = 14 - nextWeekDay;
 			let monthF = previewedMonthF-1;
@@ -74,11 +91,12 @@ function previousWeek(previewedMonthF, nextWeekDay){
 				buildWeek(currentWeekday, monthF, currentDate);
 			} else{
 				buildWeek(firstWeekdayShowed, monthF, previousWeekDay);
-			}
-			
+			}	
 		}
-		fillDataFromDB(test1);
+		fillDataFromDB(reservationsData);
 }
+
+// "Pagamina" savaitini kalendoriu
 function buildWeek(weekDay, month, monthD){
 
 	let monthDay = monthD;
@@ -114,17 +132,12 @@ function buildWeek(weekDay, month, monthD){
 			tr.appendChild(day);
 			tr.appendChild(date);
 
-			//test
 				let thForHours = document.createElement("ul");
 				let tr1 = document.createElement("li");
 				let tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
-
-			//
-
-
 			
 			for(let j = 0, mins = 0, hour = 10; j < 20; j++, mins+=15){
 				if(j%4 === 0 && j!==0){
@@ -148,7 +161,6 @@ function buildWeek(weekDay, month, monthD){
 				slot.id = reservationIdFinal;
 				slot.onclick = function(){makeReservation(slot.id)}
 				slot.appendChild(slotTime);
-				//tr.appendChild(slot);
 				tr1.appendChild(slot)
 			}
 			for(let j = 0, mins = 0, hour = 15; j < 20; j++, mins+=15){
@@ -173,13 +185,11 @@ function buildWeek(weekDay, month, monthD){
 				slot.id = reservationIdFinal;
 				slot.onclick = function(){makeReservation(slot.id)}
 				slot.appendChild(slotTime);
-				//tr.appendChild(slot);
 				tr2.appendChild(slot)
 			}
 
 			table.appendChild(tr);
-		}
-		
+		}	
 		fillControllerData(montht, montht, monthDay-7, monthDay-1);
 	} else{
 		let daysFromNextMonth = monthDay+(7-weekDay)-daysInMonth;
@@ -208,15 +218,12 @@ function buildWeek(weekDay, month, monthD){
 			tr.appendChild(day);
 			tr.appendChild(date);
 
-			//test
 				let thForHours = document.createElement("ul");
 				var tr1 = document.createElement("li");
 				var tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
-
-			//
 			}else{
 				if(i === 7-daysFromNextMonth+1){
 					monthDay = monthDay-daysInMonth
@@ -237,16 +244,12 @@ function buildWeek(weekDay, month, monthD){
 			tr.appendChild(day);
 			tr.appendChild(date);
 
-			//test
 				let thForHours = document.createElement("ul");
 				var tr1 = document.createElement("li");
 				var tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
-
-			//
-
 			}			
 			
 			for(let j = 0, mins = 0, hour = 10; j < 20; j++, mins+=15){
@@ -303,140 +306,7 @@ function buildWeek(weekDay, month, monthD){
 	}
 	nextWeekDay = monthDay;
 }
-// add to make
-function displayDateInController(){
 
-}
-
-
-
-
-
-
-function test(){
-	table.innerHTML= "";
-}
-
-
-nextBtn.addEventListener("click", function(){
-	nextWeek(montht, nextWeekDay);
-})
-previousBtn.addEventListener("click", function(){
-	previousWeek(montht, nextWeekDay);
-})
-
-$("select").on('change', function(){
-	table.innerHTML="";
-	worker = this.value;
-	montht = currentMonth;
-	buildWeek(currentWeekday, currentMonth, currentDate);
-	fillDataFromDB(test1);
-
-})
-// $("#simona").select(function(){
-// 	worker = "Simona"
-// 	console.log(worker)
-// })
-// Initiate
-// buildWeek(weekday, montht, monthDay);
-buildWeek(currentWeekday, currentMonth, currentDate);
-
-// let daysInMonth = 32 - new Date(2019, 4, 32).getDate();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const firstDay = (new Date(currentYear, currentMonth)).getDay();
-// console.log(firstDay);
-
-// console.log(today.getDate())
-
-
-// let daysInMonth =new Date(2019, 1).getDay();
-// console.log(daysInMonth)
-
-const test1 = {
-	"reservations" : [
-			{
-				"time": "Vasario-15-14-15",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Vasario-16-14-15",
-				"worker": "Simona",
-				"customer": "Rokas"
-			},
-			{
-				"time": "Vasario-20-14-15",
-				"worker": "Simona",
-				"customer": "Kazelis"
-			},
-			{
-				"time": "Vasario-14-19-15",
-				"worker": "Simona",
-				"customer": "Jurgita"
-			},
-			{
-				"time": "Vasario-23-16-15",
-				"worker": "Ieva",
-				"customer": "Nikas"
-			},
-			{
-				"time": "Vasario-24-14-15",
-				"worker": "Ieva",
-				"customer": "Dzekas"
-			},
-			{
-				"time": "Vasario-24-10-15",
-				"worker": "Ieva",
-				"customer": "Jonas"
-			},
-			{
-				"time": "Kovo-16-11-15",
-				"worker": "Ieva",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Balandžio-16-11-15",
-				"worker": "Ieva",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-16-11-30",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-16-11-45",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-10-11-15",
-				"worker": "",
-				"customer": "Antanas"
-			}
-
-		]
-}
 function fillDataFromDB(x){
 	let data =  x.reservations;
 	for(let i = 0; i < data.length; i++){
@@ -451,8 +321,8 @@ function fillDataFromDB(x){
 		}
 	}
 }
+
 function makeReservation(id){
-	// const reservationId = id;
 	if(!madeReservation){
 		const dateArr = id.split("-"); // date information splited to array
 		$('#confirmWorker').text("Kirpėja : "+ worker)
@@ -468,12 +338,9 @@ function makeReservation(id){
 				reservationWorker = worker;
 				userName = confirmName;
 
-				test1.reservations.push({"time":id, "worker": worker})
+				reservationsData.reservations.push({"time":id, "worker": worker})
 				$("#exampleModal").modal('hide');
 				$('.accept-btn').unbind('click');
-
-				// const userInfo = document.getElementById("reservationInfo"); // update user info
-				// userInfo.innerText = id;
 
 				updateReservationInfo(madeReservation, userName); // update information display info		   
 			  }else{
@@ -495,15 +362,14 @@ function makeReservation(id){
 				let reservationDay = document.getElementById(id);
 				reservationDay.classList.toggle("reservation");
 				madeReservation = false;
-				test1.reservations.pop();
+				reservationsData.reservations.pop();
 				$("#cancelModal").modal("hide");
 
 				const userInfo = document.getElementById("reservationInfo"); // update user info
 
 				updateReservationInfo(madeReservation, userName); // update information display info
 			}
-		})
-		
+		})		
 	}
 	else{
 		const alert =  document.getElementById("reservationDone");
@@ -514,7 +380,7 @@ function makeReservation(id){
 	}
 }
 
-fillDataFromDB(test1);
+
 
 
 function reservationConfirmation(callback){			// accepting or canceling reservation trough confirm modal
@@ -553,12 +419,9 @@ function fillControllerData(month1, month2, monthDay1, monthDay2){
 	let dateDisplay = document.getElementById("dateDisplay");
 	dateDisplay.innerHTML = "";
 
-	//Information needed
 	let monthFromText = document.createTextNode(months[month1] + " " + monthDay1);
 	let monthToText = document.createTextNode(months[month2] + " " + monthDay2);
-	// if(month1 === month2){
 
-	// }
 	if(monthDay1 === 32){
 		monthFromText = document.createTextNode(months[(month1+1)] + " " + 1);
 		monthToText = document.createTextNode(months[month2] + " " + monthDay2);
@@ -576,9 +439,6 @@ function fillControllerData(month1, month2, monthDay1, monthDay2){
 	dateDisplay.appendChild(monthFrom);
 	dateDisplay.appendChild(span);
 	dateDisplay.appendChild(monthTo);
-
-
-
 }
 
 function startTime(){ // clock
@@ -591,18 +451,19 @@ function startTime(){ // clock
  	document.getElementById("informationDisplayClock").innerHTML = h+":"+m+"<span>:"+s+"</span>";
  	var t = setTimeout(startTime, 500)
 }
-startTime();
-displayTodayDate()
+
 function checkTime(x){ // add zero in front of numbers < 10
 	if(x < 10){
 		x = "0" + x;
 	}
 	return x;
 }
+
 function displayTodayDate(){
 	let date = document.getElementById("informationDisplayDate");
 	date.innerHTML = months[currentMonth]+" "+currentDate+", "+days[currentWeekday-1];
 }
+
 function updateReservationInfo(dateInfo, name){
 	if(dateInfo){
 		const dateArr = dateInfo.split("-");
@@ -623,4 +484,347 @@ function updateReservationInfo(dateInfo, name){
 		$("#informationDate").html("");
 		$("#informationTime").html("");
 	}
+}
+
+const reservationsData = {
+	"reservations" : [
+			{
+				"time": "Vasario-22-14-15",
+				"worker": "Simona",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-21-18-30",
+				"worker": "Simona",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-21-10-15",
+				"worker": "Simona",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-21-11-15",
+				"worker": "Simona",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-21-12-15",
+				"worker": "Simona",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-22-14-30",
+				"worker": "Simona",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-22-14-45",
+				"worker": "Simona",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-22-16-15",
+				"worker": "Simona",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-23-14-15",
+				"worker": "Simona",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-21-19-15",
+				"worker": "Simona",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-23-16-15",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			
+			{
+				"time": "Kovo-10-11-15",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+
+
+			{
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-20-18-30",
+				"worker": "Simona",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-20-10-15",
+				"worker": "Simona",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-20-11-15",
+				"worker": "Simona",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-20-12-15",
+				"worker": "Simona",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-20-16-30",
+				"worker": "Simona",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-20-14-45",
+				"worker": "Simona",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-20-10-45",
+				"worker": "Simona",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-20-15-15",
+				"worker": "Simona",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-17-15",
+				"worker": "Simona",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-20-19-15",
+				"worker": "Simona",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-20-19-30",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			
+			{
+				"time": "Vasario-20-11-30",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+
+
+			{
+				"time": "Vasario-22-14-15",
+				"worker": "Ieva",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-21-18-30",
+				"worker": "Ieva",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-21-10-15",
+				"worker": "Ieva",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-21-19-30",
+				"worker": "Ieva",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-21-19-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-22-17-30",
+				"worker": "Ieva",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-22-18-45",
+				"worker": "Ieva",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-22-16-00",
+				"worker": "Ieva",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-23-14-00",
+				"worker": "Ieva",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-14-30",
+				"worker": "Ieva",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-21-19-45",
+				"worker": "Ieva",
+				"customer": "Jurgita"
+			},
+			
+			{
+				"time": "Vasario-24-10-15",
+				"worker": "Ieva",
+				"customer": "Jonas"
+			},
+			{
+				"time": "Kovo-16-11-15",
+				"worker": "Ieva",
+				"customer": "Gediminas"
+			},
+			{
+				"time": "Balandžio-16-11-15",
+				"worker": "Ieva",
+				"customer": "Domas"
+			},
+			{
+				"time": "Balandžio-16-11-30",
+				"worker": "Simona",
+				"customer": "Idilija"
+			},
+			{
+				"time": "Balandžio-16-11-45",
+				"worker": "Simona",
+				"customer": "Lina"
+			},
+			{
+				"time": "Balandžio-10-11-15",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+			{
+				"time": "Vasario-25-14-15",
+				"worker": "Ieva",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-25-18-30",
+				"worker": "Ieva",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-25-10-30",
+				"worker": "Ieva",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-25-19-30",
+				"worker": "Ieva",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-25-19-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-25-17-30",
+				"worker": "Ieva",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-25-18-45",
+				"worker": "Ieva",
+				"customer": "Liepa"
+			},
+			{
+				"time": "Vasario-25-16-45",
+				"worker": "Ieva",
+				"customer": "Airida"
+			},
+			{
+				"time": "Vasario-25-16-00",
+				"worker": "Ieva",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-25-14-00",
+				"worker": "Ieva",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-25-14-30",
+				"worker": "Ieva",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-25-19-45",
+				"worker": "Ieva",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-25-16-15",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			{
+				"time": "Vasario-25-14-15",
+				"worker": "Ieva",
+				"customer": "Dzekas"
+			},
+			{
+				"time": "Vasario-25-10-15",
+				"worker": "Ieva",
+				"customer": "Jonas"
+			},
+			{
+				"time": "Vasario-16-15-15",
+				"worker": "Ieva",
+				"customer": "Gediminas"
+			},
+			{
+				"time": "Vasario-25-11-15",
+				"worker": "Ieva",
+				"customer": "Domas"
+			},
+			{
+				"time": "Vasario-25-11-30",
+				"worker": "Simona",
+				"customer": "Idilija"
+			},
+			{
+				"time": "Vasario-25-11-45",
+				"worker": "Simona",
+				"customer": "Lina"
+			},
+			{
+				"time": "Vasario-25-11-15",
+				"worker": "",
+				"customer": "Ona"
+			}
+
+		]
 }

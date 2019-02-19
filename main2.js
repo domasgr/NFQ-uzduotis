@@ -1,3 +1,5 @@
+// KINTAMIEJI-----------------------------------------------------------
+
 // Dabartines datos informacija
 const today = new Date();
 
@@ -8,7 +10,7 @@ const currentHour = today.getHours();
 const currentMinute =  today.getMinutes();
 
 // STATES
-	// Savaites dienos, menesio dienos ir menesio "State'ai", kurie seka kokia data yra siuo metu rodoma
+	
 	let weekday = currentWeekday;
 	let monthDay = currentDate;
 	let montht = currentMonth;
@@ -22,18 +24,47 @@ let dateDisplay = document.getElementById("dateDisplay");
 
 let nextBtn = document.getElementById("next");
 let previousBtn = document.getElementById("previous");
-// let currentMonth = today.getMonth();
-// let currentYear = today.getFullYear();
+
 let months = ["Sausio", "Vasario", "Kovo", "Balandžio", "Gegužės", "Birželio", "Liepos", "Rugpjūčio", "Rugsėjo", "Spalio", "Lapkričio", "Gruodžio"]
 let days = ["Pirmadienis", "Antradienis", "Treciadienis", "Ketvirtadienis", "Penktadienis", "Sestadienis", "Sekmadienis"]
 
 
+//PROGRAMOS INICIJACIJA -------------------------------------------------
+$("document").ready(function(){
+	buildWeek(weekday, montht, monthDay); // Sukuria savaitini kalendoriu
+	fillDataFromDB(reservationsData); // Uzpildo kalendoriu rezervaciju informacija
+	startTime(); 		// Laikrodzio veikimas
+	displayTodayDate();	// Rodo šiandienos datą
+	fillClientsList(reservationsData); // Rodo artimiausiu klientu sarasa
+
+	nextBtn.addEventListener("click", function(){  // Kalendoriaus navigacija
+		nextWeek(montht, nextWeekDay);
+	})
+
+	previousBtn.addEventListener("click", function(){ // Kalendoriaus navigacija
+		previousWeek(montht, nextWeekDay);
+	})
+
+	$("select").on('change', function(){  // Kirpejos pasirinkimas
+		table.innerHTML="";
+		worker = this.value;
+		montht = currentMonth;
+		buildWeek(currentWeekday, currentMonth, currentDate);
+		fillDataFromDB(reservationsData);
+		fillClientsList(reservationsData);
+
+	})
+
+})
+
+
+// VISOS FUNKCIJOS -----------------------------------------
 
 function nextWeek(previewedMonth, nextWeekDay){
 	const firstWeekdayShowed = 1;
 	table.innerHTML="";
 	buildWeek(firstWeekdayShowed, previewedMonth, nextWeekDay);
-	fillDataFromDB(test1);
+	fillDataFromDB(reservationsData);
 }
 function previousWeek(previewedMonthF, nextWeekDay){
 	table.innerHTML="";
@@ -59,7 +90,7 @@ function previousWeek(previewedMonthF, nextWeekDay){
 			}
 			
 		}
-		fillDataFromDB(test1);
+		fillDataFromDB(reservationsData);
 }
 function buildWeek(weekDay, month, monthD){
 	let monthDay = monthD;
@@ -291,89 +322,9 @@ function buildWeek(weekDay, month, monthD){
 
 
 
-nextBtn.addEventListener("click", function(){
-	nextWeek(montht, nextWeekDay);
-})
-previousBtn.addEventListener("click", function(){
-	previousWeek(montht, nextWeekDay);
-})
-$("select").on('change', function(){
-	table.innerHTML="";
-	worker = this.value;
-	montht = currentMonth;
-	buildWeek(currentWeekday, currentMonth, currentDate);
-	fillDataFromDB(test1);
-	fillClientsList(test1);
 
-})
-// Initiate
-buildWeek(weekday, montht, monthDay);
 
-const test1 = {
-	"reservations" : [
-			{
-				"time": "Vasario-15-14-15",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Vasario-16-14-15",
-				"worker": "Simona",
-				"customer": "Rokas"
-			},
-			{
-				"time": "Vasario-20-14-15",
-				"worker": "Simona",
-				"customer": "Kazelis"
-			},
-			{
-				"time": "Vasario-14-19-15",
-				"worker": "Simona",
-				"customer": "Jurgita"
-			},
-			{
-				"time": "Vasario-23-16-15",
-				"worker": "Ieva",
-				"customer": "Nikas"
-			},
-			{
-				"time": "Vasario-24-14-15",
-				"worker": "Ieva",
-				"customer": "Dzekas"
-			},
-			{
-				"time": "Vasario-24-10-15",
-				"worker": "Ieva",
-				"customer": "Jonas"
-			},
-			{
-				"time": "Kovo-16-11-15",
-				"worker": "Ieva",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Balandžio-16-11-15",
-				"worker": "Ieva",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-16-11-30",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-16-11-45",
-				"worker": "Simona",
-				"customer": "Antanas"
-			},
-			{
-				"time": "Kovo-10-11-15",
-				"worker": "",
-				"customer": "Antanas"
-			}
 
-		]
-}
 
 function fillDataFromDB(x){
 	let data = x.reservations;
@@ -393,15 +344,6 @@ function fillDataFromDB(x){
 		}
 	}
 }
-fillDataFromDB(test1);
-
-
-
-
-
-
-
-
 
 function addReservation(id){
 		const dateArr = id.split("-"); // date information splited to array
@@ -418,7 +360,7 @@ function addReservation(id){
 				
 				// reservationDay.classList.toggle("reservation");
 				// madeReservation = reservationDay.id;
-				test1.reservations.push({"time":id, "customer": $('#confirm-name').val(), "worker": worker})
+				reservationsData.reservations.push({"time":id, "customer": $('#confirm-name').val(), "worker": worker})
 				// reser
 				$("#exampleModal").modal('hide');
 				$('.accept-btn').unbind('click');
@@ -439,9 +381,7 @@ function editReservation(id){
 	const reservationToDelete = document.getElementById(id);
 	const reservationName = document.querySelector("#"+id+" span");
 
-
-	var idd = id;
-	
+	var idd = id;	
 
 	$('#edit-title').text("Rezervacijos informacija");
 	$('#nameInfo').html("<i class='fas fa-signature'></i>"+$('#'+id+' span').text())
@@ -450,7 +390,7 @@ function editReservation(id){
 
 	$('#editReservation').modal();
 	$('#deleteReservation').click(function(){
-		deleteReservation(test1, idd)
+		deleteReservation(reservationsData, idd)
 		reservationToDelete.classList.remove("reserved");
 		reservationName.remove();
 		reservationToDelete.onclick = function(){addReservation(reservationToDelete.id)}
@@ -463,8 +403,6 @@ function editReservation(id){
 
 
 }
-
-
 
 function reservationConfirmation(callback){			// accepting or canceling reservation trough confirm modal
  $('.accept-btn').click(function(){
@@ -481,7 +419,7 @@ function reservationConfirmation(callback){			// accepting or canceling reservat
 
 function deleteReservation(data, id){
 	const newArr = data.reservations.filter(reservation => reservation.time !== id)
-	test1.reservations = newArr;
+	reservationsData.reservations = newArr;
 	$("#deleteReservation").unbind("click");
 	$("#exampleModal").modal("hide");
 }
@@ -523,7 +461,7 @@ function startTime(){ // clock
  	document.getElementById("informationDisplayClock").innerHTML = h+":"+m+"<span>:"+s+"</span>";
  	var t = setTimeout(startTime, 500)
 }
-startTime();
+
 function checkTime(x){ // add zero in front of numbers < 10
 	if(x < 10){
 		x = "0" + x;
@@ -534,9 +472,6 @@ function displayTodayDate(){
 	let date = document.getElementById("informationDisplayDate");
 	date.innerHTML = months[currentMonth]+" "+currentDate+", "+days[currentWeekday-1];
 }
-displayTodayDate()
-
-
 
 function fillClientsList(data){	
 	$("#clientsList").html("");
@@ -552,7 +487,7 @@ function fillClientsList(data){
 		}
 	}
 }
-fillClientsList(test1);
+
 function compareTime(a, b){
 	const dateArrA = a.time.split("-");
 	const dateArrB = b.time.split("-");
@@ -566,4 +501,350 @@ function compareTime(a, b){
 			comparison = -1;
 		}
 		return comparison;
+}
+
+
+// PAVYZDINE IS API GAUTA INFORMACIJA --------------------------------------------------
+
+const reservationsData = {
+	"reservations" : [
+			{
+				"time": "Vasario-22-14-15",
+				"worker": "Simona",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-21-18-30",
+				"worker": "Simona",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-21-10-15",
+				"worker": "Simona",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-21-11-15",
+				"worker": "Simona",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-21-12-15",
+				"worker": "Simona",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-22-14-30",
+				"worker": "Simona",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-22-14-45",
+				"worker": "Simona",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-22-16-15",
+				"worker": "Simona",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-23-14-15",
+				"worker": "Simona",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-21-19-15",
+				"worker": "Simona",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-23-16-15",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			
+			{
+				"time": "Kovo-10-11-15",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+
+
+			{
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-20-18-30",
+				"worker": "Simona",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-20-10-15",
+				"worker": "Simona",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-20-11-15",
+				"worker": "Simona",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-20-12-15",
+				"worker": "Simona",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-20-16-30",
+				"worker": "Simona",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-20-14-45",
+				"worker": "Simona",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-20-10-45",
+				"worker": "Simona",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-20-15-15",
+				"worker": "Simona",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-17-15",
+				"worker": "Simona",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-20-19-15",
+				"worker": "Simona",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-20-19-30",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			
+			{
+				"time": "Vasario-20-11-30",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+
+
+			{
+				"time": "Vasario-22-14-15",
+				"worker": "Ieva",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-21-18-30",
+				"worker": "Ieva",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-21-10-15",
+				"worker": "Ieva",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-21-19-30",
+				"worker": "Ieva",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-21-19-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-22-17-30",
+				"worker": "Ieva",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-22-18-45",
+				"worker": "Ieva",
+				"customer": "Liepa"
+			},
+			
+			{
+				"time": "Vasario-22-16-00",
+				"worker": "Ieva",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-23-14-00",
+				"worker": "Ieva",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-20-14-30",
+				"worker": "Ieva",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-21-19-45",
+				"worker": "Ieva",
+				"customer": "Jurgita"
+			},
+			
+			{
+				"time": "Vasario-24-10-15",
+				"worker": "Ieva",
+				"customer": "Jonas"
+			},
+			{
+				"time": "Kovo-16-11-15",
+				"worker": "Ieva",
+				"customer": "Gediminas"
+			},
+			{
+				"time": "Balandžio-16-11-15",
+				"worker": "Ieva",
+				"customer": "Domas"
+			},
+			{
+				"time": "Balandžio-16-11-30",
+				"worker": "Simona",
+				"customer": "Idilija"
+			},
+			{
+				"time": "Balandžio-16-11-45",
+				"worker": "Simona",
+				"customer": "Lina"
+			},
+			{
+				"time": "Balandžio-10-11-15",
+				"worker": "",
+				"customer": "Ona"
+			},
+
+
+
+
+			{
+				"time": "Vasario-25-14-15",
+				"worker": "Ieva",
+				"customer": "Romas"
+			},
+			{
+				"time": "Vasario-25-18-30",
+				"worker": "Ieva",
+				"customer": "Linas"
+			},
+			{
+				"time": "Vasario-25-10-30",
+				"worker": "Ieva",
+				"customer": "Domantas"
+			},
+			{
+				"time": "Vasario-25-19-30",
+				"worker": "Ieva",
+				"customer": "Renaldas"
+			},
+			{
+				"time": "Vasario-25-19-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
+			},
+			{
+				"time": "Vasario-25-17-30",
+				"worker": "Ieva",
+				"customer": "Petras"
+			},
+			{
+				"time": "Vasario-25-18-45",
+				"worker": "Ieva",
+				"customer": "Liepa"
+			},
+			{
+				"time": "Vasario-25-16-45",
+				"worker": "Ieva",
+				"customer": "Airida"
+			},
+			{
+				"time": "Vasario-25-16-00",
+				"worker": "Ieva",
+				"customer": "Anele"
+			},
+			{
+				"time": "Vasario-25-14-00",
+				"worker": "Ieva",
+				"customer": "Rokas"
+			},
+			{
+				"time": "Vasario-25-14-30",
+				"worker": "Ieva",
+				"customer": "Kazys"
+			},
+			{
+				"time": "Vasario-25-19-45",
+				"worker": "Ieva",
+				"customer": "Jurgita"
+			},
+			{
+				"time": "Vasario-25-16-15",
+				"worker": "Ieva",
+				"customer": "Nikas"
+			},
+			{
+				"time": "Vasario-25-14-15",
+				"worker": "Ieva",
+				"customer": "Dzekas"
+			},
+			{
+				"time": "Vasario-25-10-15",
+				"worker": "Ieva",
+				"customer": "Jonas"
+			},
+			{
+				"time": "Vasario-16-15-15",
+				"worker": "Ieva",
+				"customer": "Gediminas"
+			},
+			{
+				"time": "Vasario-25-11-15",
+				"worker": "Ieva",
+				"customer": "Domas"
+			},
+			{
+				"time": "Vasario-25-11-30",
+				"worker": "Simona",
+				"customer": "Idilija"
+			},
+			{
+				"time": "Vasario-25-11-45",
+				"worker": "Simona",
+				"customer": "Lina"
+			},
+			{
+				"time": "Vasario-25-11-15",
+				"worker": "",
+				"customer": "Ona"
+			}
+
+		]
 }
