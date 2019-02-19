@@ -4,6 +4,8 @@ const today = new Date();
 const currentWeekday = today.getDay();
 const currentDate = today.getDate();
 const currentMonth = today.getMonth();
+const currentHour = today.getHours();
+const currentMinute =  today.getMinutes();
 
 // STATES
 	// Savaites dienos, menesio dienos ir menesio "State'ai", kurie seka kokia data yra siuo metu rodoma
@@ -12,7 +14,7 @@ const currentMonth = today.getMonth();
 	let montht = currentMonth;
 	//
 	let nextWeekDay="test";
-	let madeReservation = false;
+	let worker = "Ieva";
 
 let table = document.getElementById("weekTable");
 let refreshBtn = document.getElementById("refresh");
@@ -50,7 +52,7 @@ function previousWeek(previewedMonthF, nextWeekDay){
 			montht--;
 			let daysInMonth = 32 - new Date(2019, monthF, 32).getDate();
 			let previousWeekDay = daysInMonth - daysOfLastMonth;
-			if(monthF === currentMonth && previousWeekDay <= currentWeekday){
+			if(monthF === currentMonth && previousWeekDay <= currentDate){
 				buildWeek(currentWeekday, monthF, currentDate);
 			} else{
 				buildWeek(firstWeekdayShowed, monthF, previousWeekDay);
@@ -295,70 +297,78 @@ nextBtn.addEventListener("click", function(){
 previousBtn.addEventListener("click", function(){
 	previousWeek(montht, nextWeekDay);
 })
+$("select").on('change', function(){
+	table.innerHTML="";
+	worker = this.value;
+	montht = currentMonth;
+	buildWeek(currentWeekday, currentMonth, currentDate);
+	fillDataFromDB(test1);
+	fillClientsList(test1);
 
+})
 // Initiate
 buildWeek(weekday, montht, monthDay);
 
 const test1 = {
 	"reservations" : [
 			{
-				"year": "Vasario-15-14-15",
-				"barber": "",
+				"time": "Vasario-15-14-15",
+				"worker": "Simona",
 				"customer": "Antanas"
 			},
 			{
-				"year": "Vasario-16-14-15",
-				"barber": "",
+				"time": "Vasario-16-14-15",
+				"worker": "Simona",
 				"customer": "Rokas"
 			},
 			{
-				"year": "Vasario-20-14-15",
-				"barber": "",
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
 				"customer": "Kazelis"
 			},
 			{
-				"year": "Vasario-14-19-15",
-				"barber": "",
+				"time": "Vasario-14-19-15",
+				"worker": "Simona",
 				"customer": "Jurgita"
 			},
 			{
-				"year": "Vasario-23-16-15",
-				"barber": "",
+				"time": "Vasario-23-16-15",
+				"worker": "Ieva",
 				"customer": "Nikas"
 			},
 			{
-				"year": "Vasario-24-14-15",
-				"barber": "",
+				"time": "Vasario-24-14-15",
+				"worker": "Ieva",
 				"customer": "Dzekas"
 			},
 			{
-				"year": "Vasario-24-10-15",
-				"barber": "",
+				"time": "Vasario-24-10-15",
+				"worker": "Ieva",
 				"customer": "Jonas"
 			},
 			{
-				"year": "Kovo-16-11-15",
-				"barber": "",
+				"time": "Kovo-16-11-15",
+				"worker": "Ieva",
 				"customer": "Antanas"
 			},
 			{
-				"year": "Balandžio-16-11-15",
-				"barber": "",
+				"time": "Balandžio-16-11-15",
+				"worker": "Ieva",
 				"customer": "Antanas"
 			},
 			{
-				"year": "Kovo-16-11-30",
-				"barber": "",
+				"time": "Kovo-16-11-30",
+				"worker": "Simona",
 				"customer": "Antanas"
 			},
 			{
-				"year": "Kovo-16-11-45",
-				"barber": "",
+				"time": "Kovo-16-11-45",
+				"worker": "Simona",
 				"customer": "Antanas"
 			},
 			{
-				"year": "Kovo-10-11-15",
-				"barber": "",
+				"time": "Kovo-10-11-15",
+				"worker": "",
 				"customer": "Antanas"
 			}
 
@@ -368,7 +378,7 @@ const test1 = {
 function fillDataFromDB(x){
 	let data = x.reservations;
 	for(let i = 0; i < data.length; i++){
-		let reservation = document.getElementById(data[i].year);
+		let reservation = document.getElementById(data[i].time);
 		let customerName = document.createElement("span");
 
 		let customerNameText = document.createTextNode(data[i].customer);
@@ -376,8 +386,8 @@ function fillDataFromDB(x){
 		customerName.appendChild(customerNameText);
 
 
-		if(reservation !== null){
-			reservation.style.backgroundColor = "red";
+		if(reservation !== null && data[i].worker === worker){
+			reservation.classList.add("reserved");
 			reservation.onclick = function(){editReservation(reservation.id)};
 			reservation.appendChild(customerName);
 		}
@@ -408,15 +418,13 @@ function addReservation(id){
 				
 				// reservationDay.classList.toggle("reservation");
 				// madeReservation = reservationDay.id;
-				test1.reservations.push({"year":id, "customer": $('#confirm-name').val()})
+				test1.reservations.push({"time":id, "customer": $('#confirm-name').val(), "worker": worker})
 				// reser
 				$("#exampleModal").modal('hide');
 				$('.accept-btn').unbind('click');
 				reservationDay.appendChild(confirmName);
-				reservationDay.style.backgroundColor = "red";
-				reservationDay.onclick = function(){editReservation(reservationDay.id)};
-				const userInfo = document.getElementById("reservationInfo"); // update user info
-				userInfo.innerText = id;		   
+				reservationDay.classList.add("reserved");
+				reservationDay.onclick = function(){editReservation(reservationDay.id)};	   
 			  }else{
 
 			  }
@@ -443,7 +451,7 @@ function editReservation(id){
 	$('#editReservation').modal();
 	$('#deleteReservation').click(function(){
 		deleteReservation(test1, idd)
-		reservationToDelete.style.backgroundColor = "";
+		reservationToDelete.classList.remove("reserved");
 		reservationName.remove();
 		reservationToDelete.onclick = function(){addReservation(reservationToDelete.id)}
 		$('#editReservation').modal("hide");
@@ -472,7 +480,7 @@ function reservationConfirmation(callback){			// accepting or canceling reservat
 };
 
 function deleteReservation(data, id){
-	const newArr = data.reservations.filter(reservation => reservation.year !== id)
+	const newArr = data.reservations.filter(reservation => reservation.time !== id)
 	test1.reservations = newArr;
 	$("#deleteReservation").unbind("click");
 	$("#exampleModal").modal("hide");
@@ -504,7 +512,58 @@ function fillControllerData(month1, month2, monthDay1, monthDay2){
 	dateDisplay.appendChild(monthFrom);
 	dateDisplay.appendChild(span);
 	dateDisplay.appendChild(monthTo);
+}
+function startTime(){ // clock
+	let today = new Date();
+	let h = today.getHours();
+	let m = today.getMinutes();
+ 	let s = today.getSeconds();
+ 	m = checkTime(m);
+ 	s = checkTime(s)
+ 	document.getElementById("informationDisplayClock").innerHTML = h+":"+m+"<span>:"+s+"</span>";
+ 	var t = setTimeout(startTime, 500)
+}
+startTime();
+function checkTime(x){ // add zero in front of numbers < 10
+	if(x < 10){
+		x = "0" + x;
+	}
+	return x;
+}
+function displayTodayDate(){
+	let date = document.getElementById("informationDisplayDate");
+	date.innerHTML = months[currentMonth]+" "+currentDate+", "+days[currentWeekday-1];
+}
+displayTodayDate()
 
 
 
+function fillClientsList(data){	
+	$("#clientsList").html("");
+	const visitsArr = data.reservations.sort(compareTime);
+	var count=1;
+	for(let i = 0; i<visitsArr.length; i++){
+		const visit = visitsArr[i].time.split("-")
+		console.log(months.indexOf(visit[0])+Number(visit[1]),(currentMonth+currentDate))
+		// Rodome tik tuos dar neapsilankiusius klientus
+		if(visitsArr[i].worker === worker && (months.indexOf(visit[0])+visit[1]+visit[2]+visit[3])>=(currentMonth.toString()+currentDate+currentHour+currentMinute)){ 
+			$("#clientsList").append("<li>"+"<span>"+(count)+"</span>"+"<p>"+visit[0]+" "+visit[1]+"</p>"+"<p>"+visit[2]+":"+visit[3]+"</p>"+"<p>"+visitsArr[i].customer+"</p>"+"</li>");
+			count++;
+		}
+	}
+}
+fillClientsList(test1);
+function compareTime(a, b){
+	const dateArrA = a.time.split("-");
+	const dateArrB = b.time.split("-");
+	const dateA = Number(months.indexOf(dateArrA[0])+dateArrA[1]+dateArrA[2]+dateArrA[3]);
+	const dateB = Number(months.indexOf(dateArrB[0])+dateArrB[1]+dateArrB[2]+dateArrB[3]);
+
+	let comparison = 0;
+		if(dateA > dateB){
+			comparison = 1;
+		} else if(dateA < dateB){
+			comparison = -1;
+		}
+		return comparison;
 }

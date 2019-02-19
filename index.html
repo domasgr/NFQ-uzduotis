@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Test</title>
+	<title>Klientų puslapis</title>
 	<!-- Our meta tads -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- CSS files -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
@@ -17,13 +18,15 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="confirm-title">Registruotis : data</h5>
+        <h5 class="modal-title" id="confirm-title"><i class="fas fa-file-signature"></i>Registracija</h5>
+      </div>
+      <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-
+        <p id="confirmWorker"></p>
+        <p id="confirmDate"></p>
+        <p id="confirmTime"></p>
         <form>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Jūsų vardas:</label>
@@ -43,17 +46,21 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-info-circle"></i> Informacija</h5>
+        
+      </div>
+      <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        Ar tikrai norite atšaukti rezervaciją?
+        <p id="workerInfo"></p>
+        <p id="nameInfo"></p>
+        <p id="dateInfo"></p>
+        <p id="timeInfo"></p>
+        <button id="cancelConfirmation" type="button" class="btn btn-danger">Atšaukti rezervaciją</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Nenoriu</button>
-        <button id="cancelConfirmation" type="button" class="btn btn-primary">Taip</button>
       </div>
     </div>
   </div>
@@ -69,20 +76,68 @@
   Jūs jau esate užsirezervavę laiką !   
 </div>
 <!---------------------------Alerts end ------------------------------------------------>
-	<h1>Hello</h1>
-	<div>
-		<p id="reservationInfo">Jūs dar neužsirezervavote</p>
-	</div>
-	<div id="weekSchedule">
-		<div id="controler">
-			<button id="previous">Ankstesnė</button>
-			<p id="dateDisplay"></p>
-			<button id="next">Sekanti</button>
-		</div>
-		<table id="weekTable">
-		</table>
-	</div>
-	<button id="refresh">Refresh</button>
+  <nav>
+    <ul>
+      <li><i class="fas fa-cut"></i>Kirpykla<span>(puslapis klientams)</span></li>
+    </ul>
+    <ul>
+      <li><a href="#">Kirpėjų puslapis</a></li>
+    </ul>
+  </nav>
+  <header>
+    <h1>Atlikite rezervaciją</h1>
+    <p><i class="fas fa-angle-double-down"></i></p>
+  </header>
+  <div class="schedule-section">
+  	<div id="weekSchedule">
+      <div class="information-display">
+          <div class="information-card">
+            <div class="date">
+              <p id="informationDisplayDate"></p>
+            </div>
+            <div class="clock">
+              <p id="informationDisplayClock"></p>
+            </div>
+          </div>
+          <div class="worker-information-card">
+            <h2>Pasirinkite kirpėją</h2>
+            <form>
+              <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option value="Ieva">Ieva</option>
+                <option value="Simona">Simona</option>
+              </select>
+            </form>
+          </div>
+          <div class="information-card reservation-information">
+              <p id="myReservation" class="display-none">Mano rezervacija :</p>
+              <div id="noReservationAlert">
+                <p><i class="fas fa-info-circle"></i>Jūs neturite rezervacijos</p>
+                <p>Spauskite ant norimo laiko, norėdami alitkti rezervaciją</p>
+              </div>
+              <p id="informationWorker"></p>
+              <p id="informationName"></p>
+              <p id="informationDate"></p>
+              <p id="informationTime"></p>       
+          </div>
+      </div>
+  		<div id="controller">
+        <button id="previous">
+          <i class="fas fa-caret-left"></i>
+          <p>Ankstesnė</p>
+      </button>
+        <div id="dateDisplay">
+              
+        </div>
+        <button id="next">
+          <i class="fas fa-caret-right"></i>
+          <p>Sekanti</p>
+        </button>
+      </div>
+  		<ul id="weekTable">
+  		</ul>
+  	</div>
+</div>
+	
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

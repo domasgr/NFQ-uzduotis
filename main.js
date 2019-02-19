@@ -18,6 +18,10 @@ const currentMonth = today.getMonth();
 	//
 	let nextWeekDay="test";
 	let madeReservation = false;
+	let reservationWorker;
+	let userName = undefined;
+
+	let worker = "Ieva";
 	// let previewedMonth = month;
 
 
@@ -30,7 +34,7 @@ let nextBtn = document.getElementById("next");
 let previousBtn = document.getElementById("previous");
 // let currentMonth = today.getMonth();
 // let currentYear = today.getFullYear();
-let months = ["Sausis", "Vasaris", "Kovas", "Balandis", "Geguze", "Birzelis", "Liepa", "Rugpjutis", "Rugsejis", "Spalis", "Lapkritis", "Gruodis"]
+let months = ["Sausio", "Vasario", "Kovo", "Balandžio", "Gegužės", "Birželio", "Liepos", "Rugpjūčio", "Rugsėjo", "Spalio", "Lapkričio", "Gruodžio"]
 let days = ["Pirmadienis", "Antradienis", "Treciadienis", "Ketvirtadienis", "Penktadienis", "Sestadienis", "Sekmadienis"]
 
 
@@ -64,7 +68,9 @@ function previousWeek(previewedMonthF, nextWeekDay){
 			montht--;
 			let daysInMonth = 32 - new Date(2019, monthF, 32).getDate();
 			let previousWeekDay = daysInMonth - daysOfLastMonth;
-			if(monthF === currentMonth && previousWeekDay <= currentWeekday){
+		
+			if(monthF === currentMonth && previousWeekDay <= currentDate){
+
 				buildWeek(currentWeekday, monthF, currentDate);
 			} else{
 				buildWeek(firstWeekdayShowed, monthF, previousWeekDay);
@@ -74,43 +80,58 @@ function previousWeek(previewedMonthF, nextWeekDay){
 		fillDataFromDB(test1);
 }
 function buildWeek(weekDay, month, monthD){
+
 	let monthDay = monthD;
-	if(weekDay === 0){
+	if(weekDay === 0){ // Pakeiciam sekmadienio indeksa i 7, kad butu aiskiau.
 		weekDay = 7;
 	}
 	let daysInMonth = 32 - new Date(2019, month, 32).getDate();
-													console.log(weekday)
+
 	if(monthDay+(7-weekDay) <= daysInMonth){
+	
 		for(let i = weekDay; i<=7; i++, monthDay++){
-			let tr = document.createElement("tr");
-			let day = document.createElement("th");
-			let date = document.createElement("th");
+			
+			let tr = document.createElement("li");
+				tr.setAttribute("class", "table-row");
+			let day = document.createElement("div");
+				day.setAttribute("class", "weekday");
+			let date = document.createElement("div");
+				date.setAttribute("class", "date");
 			
 			let dayText = document.createTextNode(days[i-1]);
 			
-			let dateText = document.createTextNode(months[month]+" "+monthDay);	
+			let dateMonth = document.createElement("p");
+			let dateDay = document.createElement("span");
+			let dateMonthText = document.createTextNode(months[month]);
+			let dateDayText = document.createTextNode(monthDay);
+			dateMonth.appendChild(dateMonthText);
+			dateDay.appendChild(dateDayText);
+
 			let reservationId = months[month]+"-"+monthDay; //new
 			day.appendChild(dayText);
-			date.appendChild(dateText);
+			date.appendChild(dateMonth);
+			date.appendChild(dateDay);
 			tr.appendChild(day);
 			tr.appendChild(date);
 
 			//test
-				let thForHours = document.createElement("th");
-				let tr1 = document.createElement("tr");
-				let tr2 = document.createElement("tr");
+				let thForHours = document.createElement("ul");
+				let tr1 = document.createElement("li");
+				let tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
 
 			//
+
+
 			
 			for(let j = 0, mins = 0, hour = 10; j < 20; j++, mins+=15){
 				if(j%4 === 0 && j!==0){
 					mins = 0;
 					hour++;
 				}
-				let slot = document.createElement("th");
+				let slot = document.createElement("div");
 				
 					if(mins === 0){
 						var slotTime = document.createElement("p");
@@ -123,7 +144,7 @@ function buildWeek(weekDay, month, monthD){
 						slotTime.appendChild(slotTimeText);
 						var reservationIdFinal = reservationId + "-"+hour.toString()+"-"+mins.toString();
 					}
-				// console.log(reservationIdt)
+				
 				slot.id = reservationIdFinal;
 				slot.onclick = function(){makeReservation(slot.id)}
 				slot.appendChild(slotTime);
@@ -135,7 +156,7 @@ function buildWeek(weekDay, month, monthD){
 					mins = 0;
 					hour++;
 				}
-				let slot = document.createElement("th");
+				let slot = document.createElement("div");
 				
 					if(mins === 0){
 						var slotTime = document.createElement("p");
@@ -148,7 +169,7 @@ function buildWeek(weekDay, month, monthD){
 						slotTime.appendChild(slotTimeText);
 						var reservationIdFinal = reservationId + "-"+hour.toString()+"-"+mins.toString();
 					}
-				// console.log(reservationIdt)
+			
 				slot.id = reservationIdFinal;
 				slot.onclick = function(){makeReservation(slot.id)}
 				slot.appendChild(slotTime);
@@ -158,46 +179,68 @@ function buildWeek(weekDay, month, monthD){
 
 			table.appendChild(tr);
 		}
+		
+		fillControllerData(montht, montht, monthDay-7, monthDay-1);
 	} else{
 		let daysFromNextMonth = monthDay+(7-weekDay)-daysInMonth;
 		for(let i = weekDay; i<=7; i++, monthDay++){
-			let tr = document.createElement("tr");
-			let day = document.createElement("th");
-			let date = document.createElement("th");
+			let tr = document.createElement("li");
+				tr.setAttribute("class", "table-row");
+			let day = document.createElement("div");
+				day.setAttribute("class", "weekday");
+			let date = document.createElement("div");
+				date.setAttribute("class", "date");
 			if(i <= 7 - daysFromNextMonth){
-				let dayText = document.createTextNode(days[i-1])
-				let dateText = document.createTextNode(months[month]+" "+monthDay);
-				var reservationId = months[month]+"-"+monthDay; //new	
-				day.appendChild(dayText);
-				date.appendChild(dateText);
-				tr.appendChild(day);
-				tr.appendChild(date);
-				//test
-				let thForHours = document.createElement("th");
-				var tr1 = document.createElement("tr");
-				var tr2 = document.createElement("tr");
+
+			let dayText = document.createTextNode(days[i-1]);
+			
+			let dateMonth = document.createElement("p");
+			let dateDay = document.createElement("span");
+			let dateMonthText = document.createTextNode(months[month]);
+			let dateDayText = document.createTextNode(monthDay);
+			dateMonth.appendChild(dateMonthText);
+			dateDay.appendChild(dateDayText);
+
+			var reservationId = months[month]+"-"+monthDay; //new
+			day.appendChild(dayText);
+			date.appendChild(dateMonth);
+			date.appendChild(dateDay);
+			tr.appendChild(day);
+			tr.appendChild(date);
+
+			//test
+				let thForHours = document.createElement("ul");
+				var tr1 = document.createElement("li");
+				var tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
 
 			//
-			}
-			else{
+			}else{
 				if(i === 7-daysFromNextMonth+1){
 					monthDay = monthDay-daysInMonth
 				}
-				
-				let dayText = document.createTextNode(days[i-1])
-				let dateText = document.createTextNode(months[month+1]+" "+(monthDay));
-				var reservationId = months[month+1]+"-"+monthDay; //new	
-				day.appendChild(dayText);
-				date.appendChild(dateText);
-				tr.appendChild(day);
-				tr.appendChild(date);
-				//test
-				let thForHours = document.createElement("th");
-				var tr1 = document.createElement("tr");
-				var tr2 = document.createElement("tr");
+			let dayText = document.createTextNode(days[i-1]);
+			
+			let dateMonth = document.createElement("p");
+			let dateDay = document.createElement("span");
+			let dateMonthText = document.createTextNode(months[month+1]);
+			let dateDayText = document.createTextNode(monthDay);
+			dateMonth.appendChild(dateMonthText);
+			dateDay.appendChild(dateDayText);
+
+			var reservationId = months[month+1]+"-"+monthDay; //new
+			day.appendChild(dayText);
+			date.appendChild(dateMonth);
+			date.appendChild(dateDay);
+			tr.appendChild(day);
+			tr.appendChild(date);
+
+			//test
+				let thForHours = document.createElement("ul");
+				var tr1 = document.createElement("li");
+				var tr2 = document.createElement("li");
 				thForHours.appendChild(tr1);
 				thForHours.appendChild(tr2);
 				tr.appendChild(thForHours);
@@ -211,7 +254,7 @@ function buildWeek(weekDay, month, monthD){
 					mins = 0;
 					hour++;
 				}
-				let slot = document.createElement("th");
+				let slot = document.createElement("div");
 				
 					if(mins === 0){
 						var slotTime = document.createElement("p");
@@ -234,7 +277,7 @@ function buildWeek(weekDay, month, monthD){
 					mins = 0;
 					hour++;
 				}
-				let slot = document.createElement("th");
+				let slot = document.createElement("div");
 				
 					if(mins === 0){
 						var slotTime = document.createElement("p");
@@ -255,14 +298,12 @@ function buildWeek(weekDay, month, monthD){
 
 			table.appendChild(tr);
 		}
+		fillControllerData(montht, montht+1,daysInMonth-(7-monthDay), monthDay-1);
 		montht++;		
 	}
-	
 	nextWeekDay = monthDay;
-
-
 }
-
+// add to make
 function displayDateInController(){
 
 }
@@ -275,7 +316,7 @@ function displayDateInController(){
 function test(){
 	table.innerHTML= "";
 }
-refreshBtn.addEventListener("click", test)
+
 
 nextBtn.addEventListener("click", function(){
 	nextWeek(montht, nextWeekDay);
@@ -284,8 +325,21 @@ previousBtn.addEventListener("click", function(){
 	previousWeek(montht, nextWeekDay);
 })
 
+$("select").on('change', function(){
+	table.innerHTML="";
+	worker = this.value;
+	montht = currentMonth;
+	buildWeek(currentWeekday, currentMonth, currentDate);
+	fillDataFromDB(test1);
+
+})
+// $("#simona").select(function(){
+// 	worker = "Simona"
+// 	console.log(worker)
+// })
 // Initiate
-buildWeek(weekday, montht, monthDay);
+// buildWeek(weekday, montht, monthDay);
+buildWeek(currentWeekday, currentMonth, currentDate);
 
 // let daysInMonth = 32 - new Date(2019, 4, 32).getDate();
 
@@ -321,107 +375,107 @@ buildWeek(weekday, montht, monthDay);
 const test1 = {
 	"reservations" : [
 			{
-				"year": "Vasaris-15-14-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-15-14-15",
+				"worker": "Simona",
+				"customer": "Antanas"
 			},
 			{
-				"year": "Vasaris-16-14-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-16-14-15",
+				"worker": "Simona",
+				"customer": "Rokas"
 			},
 			{
-				"year": "Vasaris-20-14-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-20-14-15",
+				"worker": "Simona",
+				"customer": "Kazelis"
 			},
 			{
-				"year": "Vasaris-14-19-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-14-19-15",
+				"worker": "Simona",
+				"customer": "Jurgita"
 			},
 			{
-				"year": "Vasaris-23-16-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-23-16-15",
+				"worker": "Ieva",
+				"customer": "Nikas"
 			},
 			{
-				"year": "Vasaris-24-14-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-24-14-15",
+				"worker": "Ieva",
+				"customer": "Dzekas"
 			},
 			{
-				"year": "Vasaris-24-10-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Vasario-24-10-15",
+				"worker": "Ieva",
+				"customer": "Jonas"
 			},
 			{
-				"year": "Kovas-16-11-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Kovo-16-11-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
 			},
 			{
-				"year": "Balandis-16-11-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Balandžio-16-11-15",
+				"worker": "Ieva",
+				"customer": "Antanas"
 			},
 			{
-				"year": "Kovas-16-11-30",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Kovo-16-11-30",
+				"worker": "Simona",
+				"customer": "Antanas"
 			},
 			{
-				"year": "Kovas-16-11-45",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Kovo-16-11-45",
+				"worker": "Simona",
+				"customer": "Antanas"
 			},
 			{
-				"year": "Kovas-10-11-15",
-				"barber": "",
-				"custumer": "Antanas"
+				"time": "Kovo-10-11-15",
+				"worker": "",
+				"customer": "Antanas"
 			}
 
 		]
 }
 function fillDataFromDB(x){
 	let data =  x.reservations;
-	console.log(data)
 	for(let i = 0; i < data.length; i++){
-		let reservation = document.getElementById(data[i].year);
-		
-		if(reservation !== null){
-			console.log(reservation.hasOwnProperty("style"))
-				if(reservation.id === madeReservation){
-					reservation.classList.add("reservation");
-				} else{
-					reservation.style.backgroundColor = "red";
-					reservation.onclick = function(){unavailableReservation()};
-				}				
+		let reservation = document.getElementById(data[i].time);	
+		if(reservation !== null && data[i].worker === worker){
+			if(reservation.id === madeReservation){
+				reservation.classList.add("reservation");
+			}else{
+				reservation.classList.add("reserved");
+				reservation.onclick = function(){unavailableReservation()};
+			}				
 		}
-		
-
 	}
 }
 function makeReservation(id){
 	// const reservationId = id;
 	if(!madeReservation){
+		const dateArr = id.split("-"); // date information splited to array
+		$('#confirmWorker').text("Kirpėja : "+ worker)
+		$('#confirmDate').html("<i class='far fa-calendar-alt'></i>"+dateArr[0] + " " + dateArr[1])
+		$('#confirmTime').html("<i class='far fa-clock'></i>"+dateArr[2]+":"+dateArr[3])
 		$('#exampleModal').modal();
 			reservationConfirmation(function(confirm){
-				console.log("funkcija veikia")
 			  if(confirm){
-			  	console.log(id)
 				let reservationDay = document.getElementById(id);
 				let confirmName = $('#confirm-name').val();
-				console.log(confirmName)
 				reservationDay.classList.toggle("reservation");
 				madeReservation = reservationDay.id;
-				test1.reservations.push({"year":id})
-				console.log(test1)
+				reservationWorker = worker;
+				userName = confirmName;
+
+				test1.reservations.push({"time":id, "worker": worker})
 				$("#exampleModal").modal('hide');
 				$('.accept-btn').unbind('click');
 
-				const userInfo = document.getElementById("reservationInfo"); // update user info
-				userInfo.innerText = id;		   
+				// const userInfo = document.getElementById("reservationInfo"); // update user info
+				// userInfo.innerText = id;
+
+				updateReservationInfo(madeReservation, userName); // update information display info		   
 			  }else{
 
 			  }
@@ -429,7 +483,12 @@ function makeReservation(id){
 			  $("#exampleModal").unbind("on")
 			});			
 	}
-	else if(madeReservation === id){
+	else if(madeReservation === id && worker === reservationWorker){
+		const dateArr = id.split("-"); // date information splited to array
+		$('#workerInfo').text("Kirpėja : "+reservationWorker);
+		$('#nameInfo').html("<i class='fas fa-signature'></i>"+userName);
+		$('#dateInfo').html("<i class='far fa-calendar-alt'></i>"+dateArr[0] + " " + dateArr[1]);
+		$('#timeInfo').html("<i class='far fa-clock'></i>"+dateArr[2]+":"+dateArr[3]);
 		$("#cancelModal").modal("show");
 		cancelConfirmation(function(confirm){
 			if(confirm){
@@ -440,7 +499,8 @@ function makeReservation(id){
 				$("#cancelModal").modal("hide");
 
 				const userInfo = document.getElementById("reservationInfo"); // update user info
-				userInfo.innerText = "Jūs dar neužsirezervavote";
+
+				updateReservationInfo(madeReservation, userName); // update information display info
 			}
 		})
 		
@@ -465,7 +525,6 @@ function reservationConfirmation(callback){			// accepting or canceling reservat
  	} else{
  		callback(true);
  	}
- 	console.log(nameInput.length)
     
   });
   $("#exampleModal").on("hidden.bs.modal", function(){
@@ -485,10 +544,83 @@ function cancelConfirmation(callback){
 function unavailableReservation(){
 	const alert = document.getElementById("reservationAlert")
 	alert.classList.remove("display-none")
-	console.log(alert)
-	setTimeout(function(){
-	console.log(alert.classList)	
+	setTimeout(function(){	
 		alert.classList.add("display-none");
 	}, 3000)
 }
 
+function fillControllerData(month1, month2, monthDay1, monthDay2){
+	let dateDisplay = document.getElementById("dateDisplay");
+	dateDisplay.innerHTML = "";
+
+	//Information needed
+	let monthFromText = document.createTextNode(months[month1] + " " + monthDay1);
+	let monthToText = document.createTextNode(months[month2] + " " + monthDay2);
+	// if(month1 === month2){
+
+	// }
+	if(monthDay1 === 32){
+		monthFromText = document.createTextNode(months[(month1+1)] + " " + 1);
+		monthToText = document.createTextNode(months[month2] + " " + monthDay2);
+	}
+
+	let monthFrom = document.createElement("p");
+	let span = document.createElement("span");
+	let spanText = document.createTextNode("-");
+		span.appendChild(spanText);
+	let monthTo = document.createElement("p");
+
+	monthFrom.appendChild(monthFromText);
+	monthTo.appendChild(monthToText);
+
+	dateDisplay.appendChild(monthFrom);
+	dateDisplay.appendChild(span);
+	dateDisplay.appendChild(monthTo);
+
+
+
+}
+
+function startTime(){ // clock
+	let today = new Date();
+	let h = today.getHours();
+	let m = today.getMinutes();
+ 	let s = today.getSeconds();
+ 	m = checkTime(m);
+ 	s = checkTime(s)
+ 	document.getElementById("informationDisplayClock").innerHTML = h+":"+m+"<span>:"+s+"</span>";
+ 	var t = setTimeout(startTime, 500)
+}
+startTime();
+displayTodayDate()
+function checkTime(x){ // add zero in front of numbers < 10
+	if(x < 10){
+		x = "0" + x;
+	}
+	return x;
+}
+function displayTodayDate(){
+	let date = document.getElementById("informationDisplayDate");
+	date.innerHTML = months[currentMonth]+" "+currentDate+", "+days[currentWeekday-1];
+}
+function updateReservationInfo(dateInfo, name){
+	if(dateInfo){
+		const dateArr = dateInfo.split("-");
+
+		$("#noReservationAlert").attr("class", "display-none");
+		$("#myReservation").removeClass("display-none");
+		
+		$("#informationWorker").text("Kirpėja : "+reservationWorker)
+		$("#informationName").text("Jūs : "+name)
+		$("#informationDate").html("<i class='far fa-calendar-alt'></i>"+dateArr[0] + " " + dateArr[1])
+		$("#informationTime").html("<i class='far fa-clock'></i>"+dateArr[2]+":"+dateArr[3])
+	} else if(!dateInfo){
+		$("#noReservationAlert").removeClass("display-none");
+		$("#myReservation").attr("class", "display-none");
+
+		$("#informationWorker").text("");
+		$("#informationName").text("");
+		$("#informationDate").html("");
+		$("#informationTime").html("");
+	}
+}
