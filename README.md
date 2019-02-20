@@ -1,5 +1,7 @@
 # NFQ-uzduotis
 
+http://kirpykla1.epizy.com
+
 Sveitainė iš dviejų dalių : klientų puslapis, kirpėjų puslapis.
 
 Klientų puslapis :
